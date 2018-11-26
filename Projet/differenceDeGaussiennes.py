@@ -1,0 +1,6 @@
+import numpy;
+
+
+def differenceDeGaussiennes():
+
+

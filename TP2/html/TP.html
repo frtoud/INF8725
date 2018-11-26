@@ -1,0 +1,639 @@
+
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html><head>
+      <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+   <!--
+This HTML was auto-generated from MATLAB code.
+To make changes, update the MATLAB code and republish this document.
+      --><title>TP</title><meta name="generator" content="MATLAB 9.4"><link rel="schema.DC" href="http://purl.org/dc/elements/1.1/"><meta name="DC.date" content="2018-11-08"><meta name="DC.source" content="TP.m"><style type="text/css">
+html,body,div,span,applet,object,iframe,h1,h2,h3,h4,h5,h6,p,blockquote,pre,a,abbr,acronym,address,big,cite,code,del,dfn,em,font,img,ins,kbd,q,s,samp,small,strike,strong,sub,sup,tt,var,b,u,i,center,dl,dt,dd,ol,ul,li,fieldset,form,label,legend,table,caption,tbody,tfoot,thead,tr,th,td{margin:0;padding:0;border:0;outline:0;font-size:100%;vertical-align:baseline;background:transparent}body{line-height:1}ol,ul{list-style:none}blockquote,q{quotes:none}blockquote:before,blockquote:after,q:before,q:after{content:'';content:none}:focus{outine:0}ins{text-decoration:none}del{text-decoration:line-through}table{border-collapse:collapse;border-spacing:0}
+
+html { min-height:100%; margin-bottom:1px; }
+html body { height:100%; margin:0px; font-family:Arial, Helvetica, sans-serif; font-size:10px; color:#000; line-height:140%; background:#fff none; overflow-y:scroll; }
+html body td { vertical-align:top; text-align:left; }
+
+h1 { padding:0px; margin:0px 0px 25px; font-family:Arial, Helvetica, sans-serif; font-size:1.5em; color:#d55000; line-height:100%; font-weight:normal; }
+h2 { padding:0px; margin:0px 0px 8px; font-family:Arial, Helvetica, sans-serif; font-size:1.2em; color:#000; font-weight:bold; line-height:140%; border-bottom:1px solid #d6d4d4; display:block; }
+h3 { padding:0px; margin:0px 0px 5px; font-family:Arial, Helvetica, sans-serif; font-size:1.1em; color:#000; font-weight:bold; line-height:140%; }
+
+a { color:#005fce; text-decoration:none; }
+a:hover { color:#005fce; text-decoration:underline; }
+a:visited { color:#004aa0; text-decoration:none; }
+
+p { padding:0px; margin:0px 0px 20px; }
+img { padding:0px; margin:0px 0px 20px; border:none; }
+p img, pre img, tt img, li img, h1 img, h2 img { margin-bottom:0px; } 
+
+ul { padding:0px; margin:0px 0px 20px 23px; list-style:square; }
+ul li { padding:0px; margin:0px 0px 7px 0px; }
+ul li ul { padding:5px 0px 0px; margin:0px 0px 7px 23px; }
+ul li ol li { list-style:decimal; }
+ol { padding:0px; margin:0px 0px 20px 0px; list-style:decimal; }
+ol li { padding:0px; margin:0px 0px 7px 23px; list-style-type:decimal; }
+ol li ol { padding:5px 0px 0px; margin:0px 0px 7px 0px; }
+ol li ol li { list-style-type:lower-alpha; }
+ol li ul { padding-top:7px; }
+ol li ul li { list-style:square; }
+
+.content { font-size:1.2em; line-height:140%; padding: 20px; }
+
+pre, code { font-size:12px; }
+tt { font-size: 1.2em; }
+pre { margin:0px 0px 20px; }
+pre.codeinput { padding:10px; border:1px solid #d3d3d3; background:#f7f7f7; }
+pre.codeoutput { padding:10px 11px; margin:0px 0px 20px; color:#4c4c4c; }
+pre.error { color:red; }
+
+@media print { pre.codeinput, pre.codeoutput { word-wrap:break-word; width:100%; } }
+
+span.keyword { color:#0000FF }
+span.comment { color:#228B22 }
+span.string { color:#A020F0 }
+span.untermstring { color:#B20000 }
+span.syscmd { color:#B28C00 }
+
+.footer { width:auto; padding:10px 0px; margin:25px 0px 0px; border-top:1px dotted #878787; font-size:0.8em; line-height:140%; font-style:italic; color:#878787; text-align:left; float:none; }
+.footer p { margin:0px; }
+.footer a { color:#878787; }
+.footer a:hover { color:#878787; text-decoration:underline; }
+.footer a:visited { color:#878787; }
+
+table th { padding:7px 5px; text-align:left; vertical-align:middle; border: 1px solid #d6d4d4; font-weight:bold; }
+table td { padding:7px 5px; text-align:left; vertical-align:top; border:1px solid #d6d4d4; }
+
+
+
+
+
+  </style></head><body><div class="content"><h2>Contents</h2><div><ul><li><a href="#2">Exercice 1</a></li><li><a href="#3">Exercice 2</a></li><li><a href="#4">Exercice 3</a></li><li><a href="#5">Exercice 4</a></li></ul></div><pre class="codeinput">close <span class="string">all</span>;
+clear;
+</pre><h2 id="2">Exercice 1</h2><pre class="codeinput"><span class="comment">%Question 5: Le bruit poivre et sel est augmente a cause du masque</span>
+<span class="comment">%laplacien car celui-ci le detecte comme contour. Pour diminuer le bruit</span>
+<span class="comment">%poivre et sel, on pourrait utiliser un filtre median.</span>
+
+src = imread(<span class="string">'theArtist.png'</span>);
+figure;
+imshow(src);
+title(<span class="string">"Image de depart"</span>);
+src_egal = Egalisation_Histogramme(src);
+
+<span class="comment">%Egalisation_Histogramme</span>
+type <span class="string">Egalisation_Histogramme.m</span>;
+
+figure;
+imshow(src_egal);
+title(<span class="string">"Question 1 - Image avec egalisation d'Histogramme"</span>);
+mask = [1,2,1,2,1; 2,4,8,4,2; 1,8,18,8,1; 2,4,8,4,2; 1,2,1,2,1]/90;
+result = Convolution(src_egal, mask);
+
+<span class="comment">%Convolution</span>
+type <span class="string">Convolution.m</span>;
+
+figure;
+imshow(result);
+title(<span class="string">"Question 2 et 3 - Image avec gaussienne et egalisation d'Histogramme"</span>)
+img_contour = Rehaussement_Contour(src_egal, 1.2);
+
+<span class="comment">%Rehaussement_Contour</span>
+type <span class="string">Rehaussement_Contour.m</span>;
+
+figure;
+imshow(img_contour);
+title(<span class="string">"Question 4 - Image avec rehaussement de contour"</span>)
+</pre><pre class="codeoutput">
+function eg = Egalisation_Histogramme(src)
+hist = imhist(src);
+cumhist = cumsum(hist);
+normcumhist = cumhist/max(cumhist);
+[h,w] = size(src);
+result = zeros(h,w);
+for i = 1:h
+    for j = 1:w
+        result(i,j) = normcumhist(src(i,j)+1);
+    end
+end
+eg = result;
+end
+
+
+%le masque doit etre normalise avant d'etre envoye a la fonction.
+function c = Convolution(img, mask)
+    [wm,hm] = size(mask);
+    [wi,hi] = size(img);
+    if(mod(wm,2) ~= 1 || mod(hm,2) ~= 1 || wm ~= hm)
+        disp("le masque doit etre un carre de dimension impaire.")
+        c = img;
+    else
+        padded = zeros(wi + wm - 1, hi + hm - 1);
+        padded(((wm-1)/2)+1:((wm-1)/2)+wi,((hm-1)/2)+1:((hm-1)/2)+hi) = img;
+        result = zeros(wi, hi);
+        for i = 1:wi
+            for j = 1:hi
+                result(i,j) = sum(sum(padded(i:i+wm-1, j:j+hm-1).*mask));
+            end
+        end
+        c = result;
+    end
+end
+
+
+function rc = Rehaussement_Contour(img, k)
+    gaussian = [1,2,1;2,4,2;1,2,1]/16;
+    laplacian = [-1,-1,-1;-1,8,-1;-1,-1,-1];
+    img_gauss = Convolution(img, gaussian);
+    img_laplacian = Convolution(img_gauss,laplacian);
+    rc = img_gauss+k*img_laplacian;
+end 
+
+</pre><img vspace="5" hspace="5" src="TP_01.png" alt=""> <img vspace="5" hspace="5" src="TP_02.png" alt=""> <img vspace="5" hspace="5" src="TP_03.png" alt=""> <img vspace="5" hspace="5" src="TP_04.png" alt=""> <h2 id="3">Exercice 2</h2><pre class="codeinput">color_img = imread(<span class="string">'pieces.jpg'</span>);
+gray_img = rgb2gray(color_img);
+figure;
+imshow(gray_img);
+title(<span class="string">"Question 1 - Image en niveau de gris"</span>)
+
+bin_img = Binariser(gray_img, 250);
+
+<span class="comment">%Binariser</span>
+type <span class="string">Binariser.m</span>;
+
+inverse_bin_img = imcomplement(bin_img);
+figure;
+imshow(inverse_bin_img);
+title(<span class="string">"Question 2 - Image binarise inverse"</span>)
+
+se = strel(<span class="string">'disk'</span>, 10);
+closed_img = imclose(inverse_bin_img,se);
+figure;
+imshow(closed_img);
+title(<span class="string">"Question 3 - Image refermee"</span>);
+
+monnaie = Compter_Monnaie(closed_img);
+
+<span class="comment">%Compter_Monnaie</span>
+type <span class="string">Compter_Monnaie.m</span>;
+
+disp(<span class="string">"il y a "</span>); disp(monnaie); disp(<span class="string">" $ dans cette photo."</span>);
+</pre><pre class="codeoutput">Warning: Image is too big to fit on screen; displaying at 33% 
+
+function b = Binariser(img, threshold)
+    [w, h] = size(img);
+    for i = 1:w
+        for j = 1:h
+            if img(i,j) &lt; threshold
+                img(i,j) = 0;
+            else
+                img(i,j) = 255;
+            end
+        end
+    end
+    b = img;
+end
+Warning: Image is too big to fit on screen; displaying at 33% 
+Warning: Image is too big to fit on screen; displaying at 33% 
+Warning: Image is too big to fit on screen; displaying at 33% 
+
+function monnaie = Compter_Monnaie(img)
+    total = 0;
+    %retirer les elements trop gros...
+    se = strel('disk', 200);
+    imgb = imerode(img, se);
+    imgb = imdilate(imgb, se);
+    img = img - imgb;
+    %2 dollars
+    se = strel('disk', 140);
+    img2d = imerode(img, se);
+    img2d = imdilate(img2d, se);
+    [a,count] = bwlabel(img2d);
+    total = total + 2*count;
+    img = img - img2d;
+    %25 sous
+    se = strel('disk', 120);
+    img25s = imerode(img, se);
+    img25s = imdilate(img25s, se);
+    [a,count] = bwlabel(img25s);
+    total = total + 0.25*count;
+    img = img - img25s;
+    %5 sous
+    se = strel('disk', 110);
+    img5s = imerode(img, se);
+    img5s = imdilate(img5s, se);
+    [a,count] = bwlabel(img5s);
+    total = total + 0.05*count;
+    img = img - img5s;
+    
+    %10 sous
+    se = strel('disk', 90);
+    img10s = imerode(img, se);
+    img10s = imdilate(img10s, se);
+    [a,count] = bwlabel(img10s);
+    total = total + 0.10*count;
+    img = img - img10s;
+    figure;
+    imshow(img);
+    title("image finale");
+    
+    monnaie = total;
+end
+il y a 
+    5.6500
+
+ $ dans cette photo.
+</pre><img vspace="5" hspace="5" src="TP_05.png" alt=""> <img vspace="5" hspace="5" src="TP_06.png" alt=""> <img vspace="5" hspace="5" src="TP_07.png" alt=""> <img vspace="5" hspace="5" src="TP_08.png" alt=""> <h2 id="4">Exercice 3</h2><pre class="codeinput"><span class="comment">%Question 1</span>
+vert = imread(<span class="string">'Barres_Verticales.png'</span>);
+obl = imread(<span class="string">'Barres_Obliques.png'</span>);
+hor = imread(<span class="string">'Barres_Horizontales.png'</span>);
+
+figure;
+imshow(vert);
+title(<span class="string">"Question 1 - Barres Verticales"</span>);
+
+figure;
+imshow(obl);
+title(<span class="string">"Question 1 - Barres Obliques"</span>);
+
+figure;
+imshow(hor);
+title(<span class="string">"Question 1 - Barres Horizontales"</span>);
+
+<span class="comment">%Question 2</span>
+fftv = fftshift(abs(fft2(vert)));
+figure;
+imshow(log(1+fftv),[]);
+title(<span class="string">"Question 2 - fft barres verticales"</span>);
+
+ffto = fftshift(abs(fft2(obl)));
+figure;
+imshow(log(1+ffto),[]);
+title(<span class="string">"Question 2 - fft barres obliques"</span>);
+
+ffth = fftshift(abs(fft2(hor)));
+figure;
+imshow(log(1+ffth),[]);
+title(<span class="string">"Question 2 - fft barres horizontales"</span>);
+
+<span class="comment">%Question 3</span>
+rotate_vert = imrotate(vert, 70, <span class="string">'bilinear'</span>, <span class="string">'crop'</span>);
+figure;
+imshow(rotate_vert);
+title(<span class="string">"Question 3 - Barres vertiales avec rotation."</span>);
+fftrv = fftshift(abs(fft2(rotate_vert)));
+figure;
+imshow(log(1+fftrv),[]);
+title(<span class="string">"Question 3 - fft barres verticales avec rotation"</span>);
+
+<span class="comment">%Question 4</span>
+<span class="comment">% La TFD d'une image (signal 2d) composee de traits verticaux va donner une</span>
+<span class="comment">% ligne horizontale. De m&ecirc;me pour une image composee de traits horizontaux,</span>
+<span class="comment">% ce qui donne une ligne verticale. La ligne la plus lumineuse de la TFD</span>
+<span class="comment">% est toujours perpendiculaire aux traits dominants de l'image.</span>
+</pre><img vspace="5" hspace="5" src="TP_09.png" alt=""> <img vspace="5" hspace="5" src="TP_10.png" alt=""> <img vspace="5" hspace="5" src="TP_11.png" alt=""> <img vspace="5" hspace="5" src="TP_12.png" alt=""> <img vspace="5" hspace="5" src="TP_13.png" alt=""> <img vspace="5" hspace="5" src="TP_14.png" alt=""> <img vspace="5" hspace="5" src="TP_15.png" alt=""> <img vspace="5" hspace="5" src="TP_16.png" alt=""> <h2 id="5">Exercice 4</h2><pre class="codeinput"><span class="comment">%Question 1</span>
+src = imread(<span class="string">'maillot.png'</span>);
+figure;
+imshow(src);
+title(<span class="string">"Image de depart"</span>);
+
+ffti = fft2(src);
+spectre = fftshift(abs(ffti));
+figure;
+imshow(log(1+spectre), []);
+title(<span class="string">"Question 1 - spectre de l'image"</span>);
+phase = angle(ffti);
+figure;
+imshow(phase, []);
+title(<span class="string">"Question 1 - phase de l'image"</span>);
+
+<span class="comment">%Question 2</span>
+q2 = imread(<span class="string">'E4_Q2.png'</span>);
+figure;
+imshow(q2, []);
+title(<span class="string">"Question 2"</span>);
+
+<span class="comment">%Question 3</span>
+[w,h] = size(spectre);
+gaussian_mask = fspecial(<span class="string">'gaussian'</span>, [w,h], 20);
+spectre_gauss = gaussian_mask.*spectre;
+fft_gauss = ifftshift(spectre_gauss).*cos(phase) + ifftshift(spectre_gauss) .* sin(phase)*1i;
+img_gauss = ifft2(fft_gauss);
+figure;
+imshow(img_gauss, []);
+title(<span class="string">"Question 3 - image avec filtrage spectral passe-bas"</span>);
+
+<span class="comment">%Question 4</span>
+
+high_gaussian_mask = fspecial(<span class="string">'gaussian'</span>, [w,h], 100);
+i_gauss = zeros(w,h);
+i_gauss(1:w, 1:h) = max(high_gaussian_mask(:));
+high_gaussian_mask = i_gauss - high_gaussian_mask;
+high_spectre_gauss = high_gaussian_mask.*spectre;
+high_fft_gauss = ifftshift(high_spectre_gauss).*cos(phase) + ifftshift(high_spectre_gauss) .* sin(phase)*1i;
+high_img_gauss = ifft2(high_fft_gauss);
+figure;
+imshow(high_img_gauss, []);
+title(<span class="string">"Question 4 - image avec filtrage spectral passe-haut"</span>);
+
+<span class="comment">%Question 5</span>
+
+low_gaussian_mask = fspecial(<span class="string">'gaussian'</span>, [w,h], 28);
+low_gaussian_mask = low_gaussian_mask./max(low_gaussian_mask(:));
+high_gaussian_mask = fspecial(<span class="string">'gaussian'</span>, [w,h], 32);
+high_gaussian_mask = ones(w,h) - (high_gaussian_mask./max(high_gaussian_mask(:)));
+filter = ones(w,h);
+filter = filter - low_gaussian_mask - high_gaussian_mask;
+figure;
+imshow(filter);
+title(<span class="string">"Question 5 - filtre passe-bande gaussien avant normalisation"</span>);
+filter = filter./norm(filter,1);
+band_pass = filter.*spectre;
+band_pass_fft = ifftshift(band_pass).*cos(phase) + ifftshift(band_pass) .* sin(phase)*1i;
+band_pass_img = ifft2(band_pass_fft);
+BI = imbinarize(band_pass_img,-0.8);
+figure;
+imshow(band_pass_img, []);
+title(<span class="string">"Question 5 - image avec filtrage spectral passe-bande"</span>);
+figure;
+imshow(BI, []);
+title(<span class="string">"Question 5 - image avec filtrage spectral passe-bande seuill&eacute;, manches conservees"</span>);
+
+<span class="comment">%Question 6</span>
+
+low_gaussian_mask = fspecial(<span class="string">'gaussian'</span>, [w,h], 11);
+low_gaussian_mask = low_gaussian_mask./max(low_gaussian_mask(:));
+high_gaussian_mask = fspecial(<span class="string">'gaussian'</span>, [w,h],15);
+high_gaussian_mask = ones(w,h) - (high_gaussian_mask./max(high_gaussian_mask(:)));
+filter = ones(w,h);
+filter = filter - low_gaussian_mask - high_gaussian_mask;
+figure;
+imshow(filter);
+title(<span class="string">"Question 6 - filtre passe-bande gaussien avant normalisation"</span>);
+filter = filter./norm(filter,1);
+band_pass = filter.*spectre;
+band_pass_fft = ifftshift(band_pass).*cos(phase) + ifftshift(band_pass) .* sin(phase)*1i;
+band_pass_img = ifft2(band_pass_fft);
+BI = imbinarize(band_pass_img,-2.7);
+BI = imerode(BI, strel(<span class="string">'rectangle'</span>,[10,30]));
+BI = imcomplement(BI);
+figure;
+imshow(band_pass_img, []);
+title(<span class="string">"Question 6 - image avec filtrage spectral passe-bande"</span>);
+figure;
+imshow(BI, []);
+title(<span class="string">"Question 6 - image avec filtrage spectral passe-bande seuill&eacute;"</span>);
+img = im2double(src);
+filtered_img = img + BI;
+filtered_img(filtered_img&gt;1)=1;
+figure;
+imshow(filtered_img, []);
+title(<span class="string">"Question 6 - image avec les rayures verticales du torse retir&eacute;es"</span>);
+
+<span class="comment">%Question 7</span>
+<span class="comment">%Le filtre id&eacute;al va introduire du bruit &agrave; cause de la fonction porte (sinus</span>
+<span class="comment">%cardinal). Le filtre Butterworth diminue ce bruit en ayant une trasition</span>
+<span class="comment">%plus lente entre les valeurs de 0 et les valeurs de 1.</span>
+
+<span class="comment">%Question 8</span>
+<span class="comment">%Si on retire la fr&eacute;quence 0 de l'image (ou qu'on la diminue), on va perdre</span>
+<span class="comment">% ou diminuer l'intensit&eacute; des r&eacute;gions continues de l'image (Fr&eacute;quence = 0).</span>
+
+<span class="comment">%Question 9</span>
+<span class="comment">%C'est un filtre Homorphique o&ugrave; on diminue le param&egrave;tre D0 &agrave; chaque</span>
+<span class="comment">%it&eacute;ration: On obtient les &eacute;l&eacute;ments de fr&eacute;quence de plus en plus basses</span>
+<span class="comment">%jusqu'&agrave; ce qu'on obtienne la couleur moyenne de l'image (fr&eacute;quence 0).</span>
+</pre><img vspace="5" hspace="5" src="TP_17.png" alt=""> <img vspace="5" hspace="5" src="TP_18.png" alt=""> <img vspace="5" hspace="5" src="TP_19.png" alt=""> <img vspace="5" hspace="5" src="TP_20.png" alt=""> <img vspace="5" hspace="5" src="TP_21.png" alt=""> <img vspace="5" hspace="5" src="TP_22.png" alt=""> <img vspace="5" hspace="5" src="TP_23.png" alt=""> <img vspace="5" hspace="5" src="TP_24.png" alt=""> <img vspace="5" hspace="5" src="TP_25.png" alt=""> <img vspace="5" hspace="5" src="TP_26.png" alt=""> <img vspace="5" hspace="5" src="TP_27.png" alt=""> <img vspace="5" hspace="5" src="TP_28.png" alt=""> <img vspace="5" hspace="5" src="TP_29.png" alt=""> <p class="footer"><br><a href="https://www.mathworks.com/products/matlab/">Published with MATLAB&reg; R2018a</a><br></p></div><!--
+##### SOURCE BEGIN #####
+close all;
+clear;
+
+%% Exercice 1
+%Question 5: Le bruit poivre et sel est augmente a cause du masque
+%laplacien car celui-ci le detecte comme contour. Pour diminuer le bruit
+%poivre et sel, on pourrait utiliser un filtre median.
+
+src = imread('theArtist.png');
+figure;
+imshow(src);
+title("Image de depart");
+src_egal = Egalisation_Histogramme(src);
+
+%Egalisation_Histogramme
+type Egalisation_Histogramme.m;
+
+figure;
+imshow(src_egal);
+title("Question 1 - Image avec egalisation d'Histogramme");
+mask = [1,2,1,2,1; 2,4,8,4,2; 1,8,18,8,1; 2,4,8,4,2; 1,2,1,2,1]/90;
+result = Convolution(src_egal, mask);
+
+%Convolution
+type Convolution.m;
+
+figure;
+imshow(result);
+title("Question 2 et 3 - Image avec gaussienne et egalisation d'Histogramme")
+img_contour = Rehaussement_Contour(src_egal, 1.2);
+
+%Rehaussement_Contour
+type Rehaussement_Contour.m;
+
+figure;
+imshow(img_contour);
+title("Question 4 - Image avec rehaussement de contour")
+
+%% Exercice 2
+
+color_img = imread('pieces.jpg');
+gray_img = rgb2gray(color_img);
+figure;
+imshow(gray_img);
+title("Question 1 - Image en niveau de gris")
+
+bin_img = Binariser(gray_img, 250);
+
+%Binariser
+type Binariser.m;
+
+inverse_bin_img = imcomplement(bin_img);
+figure;
+imshow(inverse_bin_img);
+title("Question 2 - Image binarise inverse")
+
+se = strel('disk', 10);
+closed_img = imclose(inverse_bin_img,se);
+figure;
+imshow(closed_img);
+title("Question 3 - Image refermee");
+
+monnaie = Compter_Monnaie(closed_img);
+
+%Compter_Monnaie
+type Compter_Monnaie.m;
+
+disp("il y a "); disp(monnaie); disp(" $ dans cette photo.");
+
+%% Exercice 3
+
+%Question 1
+vert = imread('Barres_Verticales.png');
+obl = imread('Barres_Obliques.png');
+hor = imread('Barres_Horizontales.png');
+
+figure;
+imshow(vert);
+title("Question 1 - Barres Verticales");
+
+figure;
+imshow(obl);
+title("Question 1 - Barres Obliques");
+
+figure;
+imshow(hor);
+title("Question 1 - Barres Horizontales");
+
+%Question 2
+fftv = fftshift(abs(fft2(vert)));
+figure;
+imshow(log(1+fftv),[]);
+title("Question 2 - fft barres verticales");
+
+ffto = fftshift(abs(fft2(obl)));
+figure;
+imshow(log(1+ffto),[]);
+title("Question 2 - fft barres obliques");
+
+ffth = fftshift(abs(fft2(hor)));
+figure;
+imshow(log(1+ffth),[]);
+title("Question 2 - fft barres horizontales");
+
+%Question 3
+rotate_vert = imrotate(vert, 70, 'bilinear', 'crop');
+figure;
+imshow(rotate_vert);
+title("Question 3 - Barres vertiales avec rotation.");
+fftrv = fftshift(abs(fft2(rotate_vert)));
+figure;
+imshow(log(1+fftrv),[]);
+title("Question 3 - fft barres verticales avec rotation");
+
+%Question 4
+% La TFD d'une image (signal 2d) composee de traits verticaux va donner une
+% ligne horizontale. De même pour une image composee de traits horizontaux,
+% ce qui donne une ligne verticale. La ligne la plus lumineuse de la TFD
+% est toujours perpendiculaire aux traits dominants de l'image.
+
+%% Exercice 4
+
+%Question 1
+src = imread('maillot.png');
+figure;
+imshow(src);
+title("Image de depart");
+
+ffti = fft2(src);
+spectre = fftshift(abs(ffti));
+figure;
+imshow(log(1+spectre), []);
+title("Question 1 - spectre de l'image");
+phase = angle(ffti);
+figure;
+imshow(phase, []);
+title("Question 1 - phase de l'image");
+
+%Question 2
+q2 = imread('E4_Q2.png');
+figure;
+imshow(q2, []);
+title("Question 2");
+
+%Question 3
+[w,h] = size(spectre);
+gaussian_mask = fspecial('gaussian', [w,h], 20);
+spectre_gauss = gaussian_mask.*spectre;
+fft_gauss = ifftshift(spectre_gauss).*cos(phase) + ifftshift(spectre_gauss) .* sin(phase)*1i;
+img_gauss = ifft2(fft_gauss);
+figure;
+imshow(img_gauss, []);
+title("Question 3 - image avec filtrage spectral passe-bas");
+
+%Question 4
+
+high_gaussian_mask = fspecial('gaussian', [w,h], 100);
+i_gauss = zeros(w,h);
+i_gauss(1:w, 1:h) = max(high_gaussian_mask(:));
+high_gaussian_mask = i_gauss - high_gaussian_mask;
+high_spectre_gauss = high_gaussian_mask.*spectre;
+high_fft_gauss = ifftshift(high_spectre_gauss).*cos(phase) + ifftshift(high_spectre_gauss) .* sin(phase)*1i;
+high_img_gauss = ifft2(high_fft_gauss);
+figure;
+imshow(high_img_gauss, []);
+title("Question 4 - image avec filtrage spectral passe-haut");
+
+%Question 5
+
+low_gaussian_mask = fspecial('gaussian', [w,h], 28);
+low_gaussian_mask = low_gaussian_mask./max(low_gaussian_mask(:));
+high_gaussian_mask = fspecial('gaussian', [w,h], 32);
+high_gaussian_mask = ones(w,h) - (high_gaussian_mask./max(high_gaussian_mask(:)));
+filter = ones(w,h);
+filter = filter - low_gaussian_mask - high_gaussian_mask;
+figure;
+imshow(filter);
+title("Question 5 - filtre passe-bande gaussien avant normalisation");
+filter = filter./norm(filter,1);
+band_pass = filter.*spectre;
+band_pass_fft = ifftshift(band_pass).*cos(phase) + ifftshift(band_pass) .* sin(phase)*1i;
+band_pass_img = ifft2(band_pass_fft);
+BI = imbinarize(band_pass_img,-0.8);
+figure;
+imshow(band_pass_img, []);
+title("Question 5 - image avec filtrage spectral passe-bande");
+figure;
+imshow(BI, []);
+title("Question 5 - image avec filtrage spectral passe-bande seuillé, manches conservees");
+
+%Question 6
+
+low_gaussian_mask = fspecial('gaussian', [w,h], 11);
+low_gaussian_mask = low_gaussian_mask./max(low_gaussian_mask(:));
+high_gaussian_mask = fspecial('gaussian', [w,h],15);
+high_gaussian_mask = ones(w,h) - (high_gaussian_mask./max(high_gaussian_mask(:)));
+filter = ones(w,h);
+filter = filter - low_gaussian_mask - high_gaussian_mask;
+figure;
+imshow(filter);
+title("Question 6 - filtre passe-bande gaussien avant normalisation");
+filter = filter./norm(filter,1);
+band_pass = filter.*spectre;
+band_pass_fft = ifftshift(band_pass).*cos(phase) + ifftshift(band_pass) .* sin(phase)*1i;
+band_pass_img = ifft2(band_pass_fft);
+BI = imbinarize(band_pass_img,-2.7);
+BI = imerode(BI, strel('rectangle',[10,30]));
+BI = imcomplement(BI);
+figure;
+imshow(band_pass_img, []);
+title("Question 6 - image avec filtrage spectral passe-bande");
+figure;
+imshow(BI, []);
+title("Question 6 - image avec filtrage spectral passe-bande seuillé");
+img = im2double(src);
+filtered_img = img + BI;
+filtered_img(filtered_img>1)=1;
+figure;
+imshow(filtered_img, []);
+title("Question 6 - image avec les rayures verticales du torse retirées");
+
+%Question 7
+%Le filtre idéal va introduire du bruit à cause de la fonction porte (sinus
+%cardinal). Le filtre Butterworth diminue ce bruit en ayant une trasition
+%plus lente entre les valeurs de 0 et les valeurs de 1.
+
+%Question 8
+%Si on retire la fréquence 0 de l'image (ou qu'on la diminue), on va perdre
+% ou diminuer l'intensité des régions continues de l'image (Fréquence = 0).
+
+%Question 9
+%C'est un filtre Homorphique où on diminue le paramètre D0 à chaque
+%itération: On obtient les éléments de fréquence de plus en plus basses
+%jusqu'à ce qu'on obtienne la couleur moyenne de l'image (fréquence 0).
+##### SOURCE END #####
+--></body></html>
