@@ -70,13 +70,14 @@ function detectionPointsCles(DoG, octave, sigma, seuil_contraste, r_courb_princi
         end
     end
     for p=1:size(points)
-        bins = zeros(36);
+        bins = zeros(36,1);
         coords = points{p};
         scale = 1.5*sigma(coords(3));
-        section_size = round(1.5*scale);
-        gaussian = fspecial('gaussian',(section_size*2)+1,scale);
-        Hsection = HoG(coords(1)-section_size:coords(1)+section_size, coords(2)-section_size:coords(2)+section_size, coords(3)-1:coords(3)+1);
-        Osection = OoG(coords(1)-section_size:coords(1)+section_size, coords(2)-section_size:coords(2)+section_size, coords(3)-1:coords(3)+1);
+        gaussian = filtreGaussien(scale);
+        section_size = (size(gaussian, 1) - 1)/2;
+        %gaussian = fspecial('gaussian',(section_size*2)+1,scale);
+        Hsection = HoG(coords(1)-section_size:coords(1)+section_size, coords(2)-section_size:coords(2)+section_size, coords(3));
+        Osection = OoG(coords(1)-section_size:coords(1)+section_size, coords(2)-section_size:coords(2)+section_size, coords(3));
         Hgaussian = Hsection .* gaussian;
         lHgaussian = Hgaussian(:);
         lOsection = Osection(:);
@@ -87,6 +88,7 @@ function detectionPointsCles(DoG, octave, sigma, seuil_contraste, r_courb_princi
         end
         max_bin = max(bins);
         other_max = bins(bins>0.8*max_bin);
+        
     end
     
 end

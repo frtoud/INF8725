@@ -5,7 +5,7 @@ function [DoGs, octaves, sigmas]=differenceDeGaussiennes(image_initiale, s, nb_o
     if mod(hsize,2) == 0
         hsize = hsize + 1;
     end
-    gaussian = fspecial('gaussian',hsize,sigmaFirst);
+    gaussian = filtreGaussien(sigmaFirst);%fspecial('gaussian',hsize,sigmaFirst);
     img = imfilter(image_initiale, gaussian, 'replicate');
     %img = imgaussfilt(image_initiale, sigmaFirst);
     disp(size(img));
@@ -38,7 +38,7 @@ function [DoGs, octaves, sigmas]=differenceDeGaussiennes(image_initiale, s, nb_o
             if mod(hsize,2) == 0
                 hsize = hsize + 1;
             end
-            gaussian = fspecial('gaussian',hsize,sigma);
+            gaussian = filtreGaussien(sigma);%fspecial('gaussian',hsize,sigma);
             currentOctave(:,:,j) = imfilter(currentOctave(:,:,j-1), gaussian, 'replicate');
             %currentOctave(:,:,j) = imgaussfilt(currentOctave(:,:,j-1), sigma);
         end

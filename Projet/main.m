@@ -10,7 +10,7 @@ grayImg = rgb2gray(img);
 %Reponse question 3 - ca ressemble a un filtre Laplacien.
 
 %% Detection de points cles
-detectionPointsCles(cell2mat(DoGs(1,1)), cell2mat(octaves(1,1)), sigmas(1,:), 0.1, 10, 1)
+detectionPointsCles(cell2mat(DoGs(1,1)), cell2mat(octaves(1,1)), sigmas(1,:), 0.1, 10, 1);
 
 % Question 1
 % On calcule le gradient du gradient de l'image: D_xx = gradient en x du
