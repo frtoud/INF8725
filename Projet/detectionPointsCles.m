@@ -1,4 +1,4 @@
-function detectionPointsCles(DoG, octave, sigma, seuil_contraste, r_courb_principale, resolution_octave)
+function [final_points, points_total, points_contraste, points_edges] = detectionPointsCles(DoG, octave, sigma, seuil_contraste, r_courb_principale, resolution_octave)
     [Height, Width, n] = size(DoG);
     
     r_modified = ((1+r_courb_principale)^2)/r_courb_principale;
@@ -42,7 +42,7 @@ function detectionPointsCles(DoG, octave, sigma, seuil_contraste, r_courb_princi
                     else
                         
                         curv = Curvature(i, j);
-                        if (curv < r_modified)
+                        if (curv > r_modified)
                             %éliminé par detection d'aretes
                             points_edges = points_edges + 1;
                         else
@@ -69,26 +69,46 @@ function detectionPointsCles(DoG, octave, sigma, seuil_contraste, r_courb_princi
             end
         end
     end
-    for p=1:size(points)
+    final_points = {};
+    for p=1:size(points(:))
         bins = zeros(36,1);
         coords = points{p};
         scale = 1.5*sigma(coords(3));
         gaussian = filtreGaussien(scale);
         section_size = (size(gaussian, 1) - 1)/2;
         %gaussian = fspecial('gaussian',(section_size*2)+1,scale);
-        Hsection = HoG(coords(1)-section_size:coords(1)+section_size, coords(2)-section_size:coords(2)+section_size, coords(3));
-        Osection = OoG(coords(1)-section_size:coords(1)+section_size, coords(2)-section_size:coords(2)+section_size, coords(3));
-        Hgaussian = Hsection .* gaussian;
-        lHgaussian = Hgaussian(:);
-        lOsection = Osection(:);
-        %find magnitudes
-        for i = 1:size(lOsection)
-            bin = ceil((lOsection(i)+pi)/(2*pi/36))+1;
-            bins(bin) = bins(bin)+ lHgaussian(i);
+        if (coords(1)-section_size > 0 && coords(1)+section_size < Height && coords(2)-section_size > 0 && coords(2)+section_size < Width)
+            Hsection = HoG(coords(1)-section_size:coords(1)+section_size, coords(2)-section_size:coords(2)+section_size, coords(3));
+            Osection = OoG(coords(1)-section_size:coords(1)+section_size, coords(2)-section_size:coords(2)+section_size, coords(3));
+            Hgaussian = Hsection .* gaussian;
+            lHgaussian = Hgaussian(:);
+            lOsection = Osection(:);
+            %find magnitudes
+            for i = 1:size(lOsection)
+                bin = mod(floor((lOsection(i)+pi)/(2*pi/36)),36)+1;
+                bins(bin) = bins(bin)+ lHgaussian(i);
+            end
+            max_bin = max(bins);
+            max_indexs = find(bins>0.8*max_bin);
+            for n = 1:size(max_indexs)
+                index = max_indexs(n);
+                x1 = mod(index+34, 36)+1;
+                x2 = index;
+                x3 = mod(index, 36)+1;
+                y1 = bins(x1);
+                y2 = bins(x2);
+                y3 = bins(x3);
+                x1 = x1 - 0.5;
+                x2 = x2 - 0.5;
+                x3 = x3 - 0.5;
+
+                xmas = y2 + 0.5*(y1 - y2)*(x3 - x2)^2 - (y3 - y2)*(x2 - x1)^2;
+                xmax = xmas / ((y1 - y2)*(x3 - x2) + (y3 - y2)*(x2 - x1));
+
+                xrad = mod(xmax/36.0, 1)*2*pi - pi;
+                %                            X, Y, scale, Angle
+                final_points{end+1, 1} = [coords(1), coords(2), coords(3), xrad];
+            end
         end
-        max_bin = max(bins);
-        other_max = bins(bins>0.8*max_bin);
-        
     end
-    
 end
