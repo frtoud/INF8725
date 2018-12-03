@@ -23,3 +23,5 @@ scatter(ptMat(:,1),ptMat(:,2),ptMat(:,3)*50,'o')
 % On calcule le gradient du gradient de l'image: D_xx = gradient en x du
 % gradient en x, D_xy = gradient en y du gradient en x, D_yy = gradient en
 % y du gradient en y.
+
+%% Attribution de descripteurs

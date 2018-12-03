@@ -46,7 +46,7 @@ function [final_points, points_total, points_contraste, points_edges] = detectio
                             %éliminé par detection d'aretes
                             points_edges = points_edges + 1;
                         else
-                            points{end+1} = [i,j,k];
+                            points{end+1} = [j,i,k];
                         end
                     end
                     
@@ -102,8 +102,8 @@ function [final_points, points_total, points_contraste, points_edges] = detectio
                 x2 = x2 - 0.5;
                 x3 = x3 - 0.5;
 
-                xmas = y2 + 0.5*(y1 - y2)*(x3 - x2)^2 - (y3 - y2)*(x2 - x1)^2;
-                xmax = xmas / ((y1 - y2)*(x3 - x2) + (y3 - y2)*(x2 - x1));
+                xmas = 0.5*(y1 - y2)*(x3 - x2)^2 - (y3 - y2)*(x2 - x1)^2;
+                xmax = y2 + xmas / ((y1 - y2)*(x3 - x2) + (y3 - y2)*(x2 - x1));
 
                 xrad = mod(xmax/36.0, 1)*2*pi - pi;
                 %                            X, Y, scale, Angle
