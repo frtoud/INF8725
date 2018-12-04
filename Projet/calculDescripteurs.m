@@ -11,6 +11,9 @@ function [descs] = calculDescripteurs(points, imgsize, images, resolution_octave
   half_sample_size = 8; % sera multiplié par deux pour garantir un chiffre pair
   sample_size = half_sample_size * 2;
   feat_size = 4;
+  angle_bins = 8;
+  
+  sample_per_feat = sample_size/feat_size;
   
   [n, ~] = size(points);
   descs = zeros(n, 130); % X + Y + 128 descriptors
@@ -28,7 +31,7 @@ function [descs] = calculDescripteurs(points, imgsize, images, resolution_octave
       descs(index_d, 1) = posx;
       descs(index_d, 2) = posy;
       
-      res = resolution_octave(oct);
+      res = resolution_octave(oct)
       step = lambda_descr*sigma*2/sample_size;
       
       target_gradient = cell2mat(gradients(oct,num - 1));
@@ -37,7 +40,7 @@ function [descs] = calculDescripteurs(points, imgsize, images, resolution_octave
       exp_det = 2 * (lambda_descr * sigma)^2;
       
       %bins: 4x4x8
-      features = zeros([4, 4, 8]);
+      features = zeros([feat_size, feat_size, angle_bins]);
       
       %sample size 16
       for i = 1:sample_size
@@ -58,7 +61,26 @@ function [descs] = calculDescripteurs(points, imgsize, images, resolution_octave
           sample_mag = target_magnitude(oct_x, oct_y) * gaussfactor;
           
           %place in histogram features, according to i & j
-          
+          for fi = 1:feat_size
+              for fj = 1:feat_size
+                  hi = fi * sample_per_feat - sample_per_feat/2;
+                  hj = fj * sample_per_feat - sample_per_feat/2;
+                  if (abs(hi-i) <= sample_per_feat) && (abs(hj-j) <= sample_per_feat)
+                      contribfactor = (1 - abs(hi-i))*(1 - abs(hj-j));
+                      %modulus sur 2pi
+                      normgrad = mod(pi + sample_grad - angle, 2*pi);
+                      for ft = 1:angle_bins
+                          %equation 28
+                          angle_distance = mod(normgrad - (pi*(ft*2-1)/angle_bins - pi), 2*pi);
+                          if angle_distance <= 2*pi/angle_bins
+                             anglefactor = (1 - angle_distance*angle_bins/(2*pi));
+                             adjusted_mag = sample_mag * contribfactor * anglefactor;
+                             features(fi, fj, ft) = features(fi, fj, ft) + adjusted_mag; 
+                          end
+                      end
+                  end
+              end
+          end
         end
       end
       
@@ -71,7 +93,7 @@ function [descs] = calculDescripteurs(points, imgsize, images, resolution_octave
       SRSS = sqrt(SRSS); %128-dim Euclidian norm
       for f = 1:size(bins_1D)
         val = min(bins_1D(f), 0.2*SRSS);
-        val = min(floor(512*val/SRSS), 255)
+        val = min(floor(512*val/SRSS), 255);
         %Offset de 2 pour X, Y
         descs(index_d, f + 2) = int8(val);
       end
@@ -80,4 +102,5 @@ function [descs] = calculDescripteurs(points, imgsize, images, resolution_octave
     end
     
   end
+  descs = descs(1:index_d-1,:);
 end
