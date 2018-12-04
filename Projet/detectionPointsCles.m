@@ -1,4 +1,4 @@
-function [final_points, points_total, points_contraste, points_edges] = detectionPointsCles(DoG, octave, sigma, seuil_contraste, r_courb_principale, resolution_octave)
+function [final_points, points_total, points_contraste, points_edges] = detectionPointsCles(DoG, octave, num_octave, sigma, seuil_contraste, r_courb_principale, resolution_octave)
     [Height, Width, n] = size(DoG);
     
     r_modified = ((1+r_courb_principale)^2)/r_courb_principale;
@@ -106,8 +106,8 @@ function [final_points, points_total, points_contraste, points_edges] = detectio
                 xmax = y2 + xmas / ((y1 - y2)*(x3 - x2) + (y3 - y2)*(x2 - x1));
 
                 xrad = mod(xmax/36.0, 1)*2*pi - pi;
-                %                            X, Y, scale, Angle
-                final_points{end+1, 1} = [coords(1), coords(2), coords(3), xrad];
+                %                            o, s, X, Y, scale, Angle
+                final_points{end+1, 1} = [num_octave, coords(3), coords(1), coords(2), sigma(coords(3)), xrad];
             end
         end
     end
