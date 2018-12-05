@@ -5,7 +5,7 @@ function [DoGs, octaves, sigmas]=differenceDeGaussiennes(image_initiale, s, nb_o
     if mod(hsize,2) == 0
         hsize = hsize + 1;
     end
-    gaussian = filtreGaussien(sigmaFirst);%fspecial('gaussian',hsize,sigmaFirst);
+    gaussian = fspecial('gaussian',hsize,sigmaFirst);
     img = imfilter(image_initiale, gaussian, 'replicate');
     %img = imgaussfilt(image_initiale, sigmaFirst);
     disp(size(img));
@@ -13,6 +13,7 @@ function [DoGs, octaves, sigmas]=differenceDeGaussiennes(image_initiale, s, nb_o
     img = imresize(img, 2, 'bilinear');
     disp(size(img));
     sigma_zero = 0.8;
+    dist_Pixel_zero = 0.5;
     % creating the octaves
     k = 2^(1.0/s);
     resizedImg = img;
@@ -30,22 +31,22 @@ function [DoGs, octaves, sigmas]=differenceDeGaussiennes(image_initiale, s, nb_o
         %first image is set as the downscale of the first image of the last
         %octave, we determine the other levels of the pyramid of gradients
         %based on that image.
-        sigmas(i,1) = sigma_zero/distPixel;
+        sigmas(i,1) = sigma_zero * distPixel / dist_Pixel_zero;
         for j=2:s+3
-            sigma = sigma_zero*sqrt(k^(2*(j-1))-k^(2*(j-2)))/distPixel;
-            sigmas(i,j) = sigma_zero*k^((j-1))/distPixel;
+            sigma = sigma_zero*sqrt(k^(2*(j-1))-k^(2*(j-2)))/ dist_Pixel_zero;
+            sigmas(i,j) = sigma_zero*k^((j-1)) * distPixel / dist_Pixel_zero;
             hsize = round(3*sigma);
             if mod(hsize,2) == 0
                 hsize = hsize + 1;
             end
-            gaussian = filtreGaussien(sigma);%fspecial('gaussian',hsize,sigma);
+            gaussian = fspecial('gaussian',hsize,sigma);
             currentOctave(:,:,j) = imfilter(currentOctave(:,:,j-1), gaussian, 'replicate');
             %currentOctave(:,:,j) = imgaussfilt(currentOctave(:,:,j-1), sigma);
         end
         octaves{i,1} = currentOctave;
         if i ~= nb_octave
             %downsampling resizedImg
-            nextOctaveBase = currentOctave(1:2:height, 1:2:width, 1);
+            nextOctaveBase = currentOctave(1:2:height, 1:2:width, s+1);
             [nextHeight, nextWidth] = size(nextOctaveBase);
             nextOctave = zeros(nextHeight, nextWidth, s+3);
             nextOctave(:,:,1) = nextOctaveBase;

@@ -1,7 +1,8 @@
-function [final_points, points_total, points_contraste, points_edges] = detectionPointsCles(DoG, octave, num_octave, sigma, seuil_contraste, r_courb_principale, resolution_octave)
+function [final_points, points_total, points_contraste, points_edges] = detectionPointsCles(DoG, octave, sigma, seuil_contraste, r_courb_principale, num_octave)
     [Height, Width, n] = size(DoG);
     
     r_modified = ((1+r_courb_principale)^2)/r_courb_principale;
+    res_octave = 2^(num_octave - 1) /2;
     
     points = {};
     
@@ -21,15 +22,15 @@ function [final_points, points_total, points_contraste, points_edges] = detectio
         Curvature = TrH .* TrH ./ DetH;
         
         
-        diff_img_x = imfilter(DoG(k), [1,0,-1;1,0,-1;1,0,-1]);
-        diff_img_y = imfilter(DoG(k), [1,1,1;0,0,0;-1,-1,-1]);
+        %diff_img_x = imfilter(DoG(k), [1,0,-1;1,0,-1;1,0,-1]);
+        %diff_img_y = imfilter(DoG(k), [1,1,1;0,0,0;-1,-1,-1]);
         
         for i = 2:Height-1
             for j = 2:Width-1
                 % detection des extremas
                 comp_mat = DoG(i-1:i+1, j-1:j+1, k-1:k+1);
-                [max_val, max_index] = max(comp_mat(:));
-                [min_val, min_index] = min(comp_mat(:));
+                [~, max_index] = max(comp_mat(:));
+                [~, min_index] = min(comp_mat(:));
                 if((max_index == 14) || (min_index == 14))
                     %Point est un extremum local
                     points_total = points_total + 1;
@@ -42,11 +43,11 @@ function [final_points, points_total, points_contraste, points_edges] = detectio
                     else
                         
                         curv = Curvature(i, j);
-                        if (curv > r_modified)
+                        if (curv < r_modified)
                             %éliminé par detection d'aretes
                             points_edges = points_edges + 1;
                         else
-                            points{end+1} = [j,i,k];
+                            points{end+1} = [i,j,k];
                         end
                     end
                     
@@ -63,7 +64,7 @@ function [final_points, points_total, points_contraste, points_edges] = detectio
                 dx = octave(i+1,j,k) - octave(i-1,j,k);
                 dy = octave(i,j+1,k)- octave(i,j-1,k);
                 g_mag = sqrt(dx^2+dy^2);
-                g_orientation = atan(dx/dy);
+                g_orientation = atan2(dx,dy);
                 HoG(i,j,k) = g_mag;
                 OoG (i,j,k) = g_orientation;
             end
@@ -103,11 +104,13 @@ function [final_points, points_total, points_contraste, points_edges] = detectio
                 x3 = x3 - 0.5;
 
                 xmas = 0.5*(y1 - y2)*(x3 - x2)^2 - (y3 - y2)*(x2 - x1)^2;
-                xmax = y2 + xmas / ((y1 - y2)*(x3 - x2) + (y3 - y2)*(x2 - x1));
+                xmax = x2 + xmas / ((y1 - y2)*(x3 - x2) + (y3 - y2)*(x2 - x1));
 
                 xrad = mod(xmax/36.0, 1)*2*pi - pi;
+                
+                
                 %                            o, s, X, Y, scale, Angle
-                final_points{end+1, 1} = [num_octave, coords(3), coords(1), coords(2), sigma(coords(3)), xrad];
+                final_points{end+1, 1} = [num_octave, coords(3), coords(2)*res_octave, coords(1)*res_octave, sigma(coords(3)), xrad];
             end
         end
     end

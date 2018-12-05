@@ -1,4 +1,4 @@
-function [descs] = calculDescripteurs(points, imgsize, images, resolution_octave)
+function [descs] = calculDescripteurs(points, imgsize, images)
   
   [gradients, magnitudes] = calculGradients(images);
   %Assume results to be:
@@ -31,7 +31,7 @@ function [descs] = calculDescripteurs(points, imgsize, images, resolution_octave
       descs(index_d, 1) = posx;
       descs(index_d, 2) = posy;
       
-      res = resolution_octave(oct)
+      res = 2^(oct-1) /2;
       step = lambda_descr*sigma*2/sample_size;
       
       target_gradient = cell2mat(gradients(oct,num - 1));
