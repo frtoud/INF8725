@@ -27,7 +27,7 @@ function [descs] = calculDescripteurs(points, imgsize, images)
     angle = points(index_p, 6);
     %tester la distance a la bordure avec sqrt2 * lambda * sigma
     dist = sqrt(2)*lambda_descr*sigma;
-    if (dist < posx && posx < imgsize(1) - dist && dist < posy && posy < imgsize(2) - dist)
+    if (dist < posx && posx < imgsize(2) - dist && dist < posy && posy < imgsize(1) - dist)
       descs(index_d, 1) = posx;
       descs(index_d, 2) = posy;
       
@@ -57,8 +57,8 @@ function [descs] = calculDescripteurs(points, imgsize, images)
           %scale according to gauss
           gaussfactor = exp(-(dx^2 + dy^2)/exp_det);
           %collect sample orientation & magnitude
-          sample_grad = target_gradient(oct_x, oct_y);
-          sample_mag = target_magnitude(oct_x, oct_y) * gaussfactor;
+          sample_grad = target_gradient(oct_y, oct_x);
+          sample_mag = target_magnitude(oct_y, oct_x) * gaussfactor; %C^descr_m,n
           
           %place in histogram features, according to i & j
           for fi = 1:feat_size
