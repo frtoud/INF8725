@@ -11,11 +11,22 @@ function [final_points, points_total, points_contraste, points_edges] = detectio
     points_edges = 0;%éliminés par Hessian
     
     for k = 2:n-1
-        diff_x = imfilter(DoG(:,:,k), [1,0,-1;1,0,-1;1,0,-1]);
-        diff_y = imfilter(DoG(:,:,k), [1,1,1;0,0,0;-1,-1,-1]);
-        diff2_x = imfilter(diff_x, [1,0,-1;1,0,-1;1,0,-1]);
-        diff_xy = imfilter(diff_x, [1,1,1;0,0,0;-1,-1,-1]);
-        diff2_y = imfilter(diff_y, [1,1,1;0,0,0;-1,-1,-1]);
+        %calcul rapide de Hessian, avec filtres correspondants. 
+        diff_x = imfilter(DoG(:,:,k), [ 1, 0,-1;
+                                        1, 0,-1;
+                                        1, 0,-1]);
+        diff_y = imfilter(DoG(:,:,k), [ 1, 1, 1;
+                                        0, 0, 0;
+                                       -1,-1,-1]);
+        diff2_x = imfilter(diff_x, [ 1, 0,-1;
+                                     1, 0,-1;
+                                     1, 0,-1]);
+        diff_xy = imfilter(diff_x, [ 1, 1, 1; 
+                                     0, 0, 0;
+                                    -1,-1,-1]);
+        diff2_y = imfilter(diff_y, [ 1, 1, 1; 
+                                     0, 0, 0;
+                                    -1,-1,-1]);
         
         TrH = diff2_x + diff2_y;
         DetH = diff2_x .* diff2_y - diff_xy .* diff_xy;

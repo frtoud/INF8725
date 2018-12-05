@@ -1,5 +1,5 @@
 function [DoGs, octaves, sigmas]=differenceDeGaussiennes(image_initiale, s, nb_octave)
-    % Initial convolution to get sigma = 0.8 (initial sigma = 0.5)
+    %COnvolution initiale pour obtenir sigma_min = 0.8 (à partir de 0.5)
     sigmaFirst = sqrt(0.8^2 - 0.5^2);
     hsize = round(3*sigmaFirst);
     if mod(hsize,2) == 0
@@ -78,6 +78,7 @@ function [DoGs, octaves, sigmas]=differenceDeGaussiennes(image_initiale, s, nb_o
     
     test = DoGs{1,1};
     figure;
+    %Reponse question 2 - voir tracé résultant.
     %Reponse question 3 - ca ressemble a un filtre Laplacien.
     for j=1:s+2
         img2show = test(:,:,j);

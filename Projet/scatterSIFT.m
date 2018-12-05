@@ -2,7 +2,7 @@ function scatterSIFT(img, points)
 %SCATTERSIFT Summary of this function goes here
 %   Point matrix: O, S, X, Y, Blur, Angle
 % augmenter la taille des cercles
-sig = 1;
+sig = 3;
 
 figure;
 imshow(img, [])
@@ -17,7 +17,7 @@ for i = 1:nb
         case 2
             c = [0, 1, 0];
         case 3
-            c = [0, 0, 1];
+            c = [0, 0.5, 1];
         otherwise
             c = [1, 0, 1];
     end
